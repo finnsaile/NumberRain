@@ -15,26 +15,16 @@ speed{300} {
 Rain::~Rain() {}
 
 void Rain::update() {
-    
-    int factor;
-    double frame_time = clock.restart().asSeconds(), delta_time = 0.001;
-
-    accumulator += frame_time;
-    factor = static_cast<int>(accumulator / delta_time);
-    accumulator -= factor * delta_time;
-
-    delta_time = factor * delta_time;
+    double frame_time = clock.restart().asSeconds();
 
     for(auto& N : nodes) {
         if(N.active) {
-            Vector2f pos = N.update(delta_time * speed);
+            Vector2f pos = N.update(frame_time * speed);
             if((pos.y - (Node::trail_length + 1) * (N.getBounds().height + Node::char_margin)) > size.y)
                 N.active = false;
         }
         else {
-            if(delta_time > 0.3)
-            std::cout << delta_time << std::endl;
-            if((rand() % (int)((1/(delta_time * 10)) * 75 + 1)) == 1)
+            if((rand() % (int)((1/frame_time) * 10 + 1)) == 1)
                 N.reset();
         }
     }
