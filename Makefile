@@ -6,10 +6,10 @@ LIBRARIES := -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-a
 SRC     := src
 INCLUDE := include
 
-all: clean main.exe
+all: clean release
 
 release: main.cpp *.cpp
-	$(CXX) $(CXX_FLAGS) $(RELEASE_FLAGS) -I$(INCLUDE) $^ -o main.exe $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) $(RELEASE_FLAGS) -I$(INCLUDE) $^ -o NumberRain.exe $(LIBRARIES)
 
 main.exe: main.cpp *.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $@ $(LIBRARIES)

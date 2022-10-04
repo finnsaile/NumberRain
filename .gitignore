@@ -33,6 +33,3 @@
 
 .vscode
 .DS_Store
-*.png
-!RayTraceExample.png
-!/project/implementation/Snowman.png
