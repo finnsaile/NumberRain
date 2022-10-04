@@ -19,14 +19,15 @@ private:
 
     //variables for calculating movement
     Clock clock;
-    double accumulator;
+    //double accumulator;
     unsigned int speed;
 
 public:
-    Rain(Vector2u size);
+    Rain(Vector2u size, unsigned int speed = 300);
     virtual ~Rain();
     void resize(Vector2u size);
     void update();
+    void setColor(sf::Color c);
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

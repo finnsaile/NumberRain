@@ -3,10 +3,10 @@
 #include <cmath>
 #include <random>
 
-Rain::Rain(Vector2u size) :
+Rain::Rain(Vector2u size, unsigned int speed) :
 size{size},
 letter_count{0},
-speed{300} {
+speed{speed} {
     srand(time(NULL));
     Node::char_font.loadFromFile("OCRAEXT.TTF");
     resize(size);
@@ -24,7 +24,7 @@ void Rain::update() {
                 N.active = false;
         }
         else {
-            if((rand() % (int)((1/frame_time) * 10 + 1)) == 1)
+            if((rand() % (int)((3000/(frame_time * speed)) + 1)) == 1)
                 N.reset();
         }
     }
@@ -39,8 +39,14 @@ void Rain::resize(Vector2u size) {
 
     //calculate new letter count and border margins
     float new_let_count = size.x / (test_bounds.width + Node::char_margin);
-    Node::border_margin = ((new_let_count - (int)new_let_count) * test_bounds.width + Node::char_margin) / 2;
+    float total_border = (size.x - ((int)new_let_count * (test_bounds.width + Node::char_margin) - Node::char_margin));
+    //if border margins are large enough to fit another letter
+    if(total_border - (test_bounds.width + Node::char_margin) > 0) {
+        total_border -= (test_bounds.width + Node::char_margin);
+        new_let_count++;
+    } 
 
+    Node::border_margin = total_border / 2;
 
     unsigned int count_dif = labs((int)new_let_count - (int)letter_count);
 
@@ -59,8 +65,14 @@ void Rain::resize(Vector2u size) {
         N.update(0);
 }
 
+void Rain::setColor(sf::Color c) {
+    Node::char_color = c;
+    for(auto& n : nodes)
+        n.updateColor();
+}
+
 void Rain::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     for(auto& N : nodes) {
-        target.draw(N);
+        if(N.active) target.draw(N);
     }
 }

@@ -29,7 +29,7 @@ public:
     virtual ~Node();
     void reset();
     Vector2f update(float delta);
-
+    void updateColor();
 
     FloatRect getBounds();
 

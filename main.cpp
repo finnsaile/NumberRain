@@ -5,6 +5,7 @@
 using namespace sf;
 using namespace std;
 
+int c = 0;
 Color colorArray[] = 
 {  
     Color::Green,
@@ -15,23 +16,26 @@ Color colorArray[] =
     Color::Yellow
 };
 
-int main()
+int main(int argc, char* argv[])
 {
-    //antialiasing 
-    ContextSettings settings;
-    settings.antialiasingLevel = 0;
+    unsigned int speed = 300;
+    if(argc > 1) speed = stoi(argv[1]);
+    if(argc > 2) Node::trail_length = stoi(argv[2]);
+    if(argc > 3) Node::char_size = stoi(argv[3]);
+    if(argc > 4) Node::char_margin = stoi(argv[4]);
+
     //get screen height
     Vector2u size {VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height};
 
     FloatRect visibleArea(0, 0, size.x, size.y);
-    //create non scalable window
-    RenderWindow window(VideoMode(size.x / 2, size.y / 2), "Clock", Style::Titlebar | Style::Close | Style::Resize, settings);
-    //enable V-Sync
-    window.setFramerateLimit(60);
+    //create scalable window
+    RenderWindow window(VideoMode(size.x / 2, size.y / 2), "Matrix", Style::Titlebar | Style::Close | Style::Resize);
+    //framerate
+    window.setFramerateLimit(30);
     //disable repeat key press on hold
     window.setKeyRepeatEnabled(true);
-    //Create clock
-    Rain rain(window.getSize());
+    //Create rain
+    Rain rain(window.getSize(), speed);
 
     Event event;
     //window loop
@@ -60,9 +64,10 @@ int main()
                             window.close(); 
                             break;
 
-                        // case Keyboard::C:    
-                        //     colorCycle(clockObject);                        
-                        //     break;
+                        case Keyboard::C:
+                            c = (c + 1) % 6;    
+                            rain.setColor(colorArray[c]);                        
+                            break;
 
                         default:
                             break;

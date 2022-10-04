@@ -5,7 +5,7 @@
 using std::to_string;
 
 unsigned int Node::char_size = 30;
-unsigned int Node::char_margin = 14;
+unsigned int Node::char_margin = 15;
 unsigned int Node::trail_length = 30;
 float Node::border_margin = 0;
 Color Node::char_color = Color::Green;
@@ -33,13 +33,10 @@ active{false} {
         ct.setFillColor(temp_color);
         i++;
     }
-    std::cout << "Create" << std::endl;
     update(0);
 }
 
-Node::~Node() {
-    std::cout << "Delete" << std::endl;
-}
+Node::~Node() {}
 
 Vector2f Node::update(float delta) {
     head_position = {border_margin + index * (text_bounds.width + char_margin), head_position.y + delta};
@@ -62,10 +59,17 @@ void Node::reset() {
     update(0);
 }
 
-void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    if(!active)
-        return;
+void Node::updateColor() {
+    int i = 0;
+    for(auto& ct : char_text) {
+        Color temp_color = char_color;
+        temp_color.a = 255 - i * (255 / trail_length);
+        ct.setFillColor(temp_color);
+        i++;
+    }
+}
 
+void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     for(auto& ct : char_text)
         target.draw(ct);
 }
