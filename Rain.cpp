@@ -9,6 +9,7 @@ letter_count{0},
 speed{speed} {
     srand(time(NULL));
     Node::char_font.loadFromFile("OCRAEXT.TTF");
+    Node::main_rain = this;
     resize(size);
 }
 
@@ -19,9 +20,7 @@ void Rain::update() {
 
     for(auto& N : nodes) {
         if(N.active) {
-            Vector2f pos = N.update(frame_time * speed);
-            if((pos.y - (Node::trail_length + 1) * (N.getBounds().height + Node::char_margin)) > size.y)
-                N.active = false;
+            N.active = N.update(frame_time * speed);
         }
         else {
             if((rand() % (int)((3000/(frame_time * speed)) + 1)) == 1)
@@ -69,6 +68,10 @@ void Rain::setColor(sf::Color c) {
     Node::char_color = c;
     for(auto& n : nodes)
         n.updateColor();
+}
+
+Vector2u Rain::getSize() {
+    return size;
 }
 
 void Rain::draw(sf::RenderTarget& target, sf::RenderStates states) const {

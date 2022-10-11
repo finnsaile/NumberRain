@@ -28,7 +28,7 @@ public:
     void resize(Vector2u size);
     void update();
     void setColor(sf::Color c);
-
+    Vector2u getSize();
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
