@@ -31,7 +31,8 @@ int main(int argc, char* argv[])
     //create scalable window
     RenderWindow window(VideoMode(size.x / 2, size.y / 2), "Matrix", Style::Titlebar | Style::Close | Style::Resize);
     //framerate
-    window.setFramerateLimit(30);
+    //window.setFramerateLimit(30);
+    window.setVerticalSyncEnabled(true);
     //disable repeat key press on hold
     window.setKeyRepeatEnabled(true);
     //Create rain

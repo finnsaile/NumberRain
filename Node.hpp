@@ -29,6 +29,7 @@ private:
     //font and string for digital clock
     list<Text> char_text;
 
+    Text createTempText();
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 public:
     Node(unsigned int index);

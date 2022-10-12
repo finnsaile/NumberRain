@@ -2,8 +2,6 @@
 #include <iostream>
 #include <string>
 
-Text createTempText(sf::FloatRect& text_bounds);
-
 using std::to_string;
 
 Rain* Node::main_rain = nullptr;
@@ -18,20 +16,18 @@ Node::Node(unsigned int index) :
 index{index},
 current_tail_index{1},
 head_position{0, 0},
+sample_text{createTempText()},
 active{false} {
-    sample_text = createTempText(text_bounds);
     Text temp_text = sample_text;
     temp_text.setString(to_string(rand() % 2));
-    //char_text = list<Text>(trail_length, temp_text);
     char_text.push_back(temp_text);
-    update(0);
 }
 
 Node::~Node() {}
 
 bool Node::update(float delta) {
     //advance all elements by the correct amount
-    head_position = {border_margin + index * (text_bounds.width + char_margin), head_position.y + delta};
+    head_position = {border_margin + index * (text_bounds.width + char_margin), char_text.front().getPosition().y + delta};
     int i = 0;
     for(auto& ct : char_text) {
         ct.setPosition(head_position.x, head_position.y - (text_bounds.height + char_margin) * i);
@@ -69,8 +65,7 @@ bool Node::update(float delta) {
         else
             break;
     }
-    //update the head position and return whether the node has left the screen completely
-    head_position = {head_position.x, char_text.front().getPosition().y};
+    //return whether the node has left the screen completely
     return static_cast<bool>(char_text.size());
 }
 
@@ -79,20 +74,23 @@ FloatRect Node::getBounds() {
 }
 
 void Node::reset() {
-    sample_text = createTempText(text_bounds);
     Text temp_text = sample_text;
     temp_text.setString(to_string(rand() % 2));
-    char_text.push_back(sample_text);
+    temp_text.setFillColor(char_color);
+    
+    char_text.push_back(temp_text);
+    
     active = true;
     head_position.y = 0;
     current_tail_index = 0;
-    update(0);
 }
 
 void Node::updateColor() {
-    int i = 0;
+    int i = current_tail_index - char_text.size();
+    i = i < 0 ? 0 : i;
+    
+    Color temp_color = char_color;
     for(auto& ct : char_text) {
-        Color temp_color = char_color;
         temp_color.a = 255 - i * (255 / trail_length);
         ct.setFillColor(temp_color);
         i++;
@@ -104,7 +102,7 @@ void Node::draw(sf::RenderTarget& target, sf::RenderStates states) const {
         target.draw(ct);
 }
 
-Text createTempText(sf::FloatRect& text_bounds) {
+Text Node::createTempText() {
     Text temp_text;
     temp_text.setCharacterSize(Node::char_size);
     temp_text.setFillColor(Node::char_color);
