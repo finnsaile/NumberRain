@@ -29,6 +29,8 @@ public:
     void update();
     void setColor(sf::Color c);
     Vector2u getSize();
+    unsigned int getSpeed();
+    void setSpeed(unsigned int);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 

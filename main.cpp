@@ -69,10 +69,19 @@ int main(int argc, char* argv[])
                             c = (c + 1) % 6;    
                             rain.setColor(colorArray[c]);                        
                             break;
+                        
+                        case Keyboard::Down:
+                            rain.setSpeed(rain.getSpeed() * 2);
+                            break;
+                        
+                        case Keyboard::Up:
+                            rain.setSpeed(rain.getSpeed() / 2 != 0 ? rain.getSpeed() / 2 : 1);
+                            break;
 
                         default:
                             break;
                     }
+
                 default:
                     break;
             }     

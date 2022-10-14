@@ -74,6 +74,13 @@ Vector2u Rain::getSize() {
     return size;
 }
 
+unsigned int Rain::getSpeed() {
+    return speed;
+}
+
+void Rain::setSpeed(unsigned int speed) {
+    this->speed = speed;
+}
 void Rain::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     for(auto& N : nodes) {
         if(N.active) target.draw(N);
